@@ -1,0 +1,51 @@
+--Setup for Django rest api--
+//// following https://www.youtube.com/watch?v=t-uAgI-AUxc
+// A. Start the Django project
+// From Terminal
+// 1. python3 -m django startproject mysite // initializes django apps, and site
+// 2. cd mysite/
+// 3. python3 manage.py startapp api // initializes app with website --> In django, apps are way to separate pieces of logic
+// From Editor
+// 4. mysite/settings.py --> add: ["api", "rest_framework"] To the INSTALLED_APPS variable 
+
+
+//// B.Setup Data Models ////
+// From Editor
+// 1. app/model.py --> setup data model for tables & fields
+// 2. app/views.py --> identify and use django template which define how users interact with the data
+// 3. app/urls.py --> define the routes that point to specific views
+// 4. urls.py --> define the redirects as needed (i.e. if you have multiple applications)
+
+//// C.Perform database migrations ///
+//// Uses django ORM to create SQL tables (and updates necessary)
+// From Terminal
+// 1. python3 manage.py makemigrations // create files for what migrations need to be applied
+// 2. python3 manage.py migrate // applies migrations --> notice db.sqlite3 is created if not already existing...
+// From Terminal
+// 3. python3 manage.py runserver // spins up server
+
+//// D. Prepare for depoyment of api ////
+// Create Dockerfile
+// 1. Create dockerfile for environment
+// 2. Expose port 8000 to the world.
+// 3. Ensure to execute "python3 manage.py runserver 0.0.0.0:8000" to run the server 
+// 4. create ./db-script.sh which performs C.1 & C.2 above to initialize and migrate a SQLLiteDB
+
+//// E. Setup AcornFile for deployment into a production environment ///
+// Create AcornFile
+// 1. specify 'services', in this case, specify the "ghcr.io/acorn-io/mariadb:v10.11.5-1" image and alias as 'db'
+// 2. specify 'jobs', in this case initialize all database configuration via 'dbinit' for 'db'
+// 3. specify 'containers', in this case specify the build to be determined by the 'containerBuild' specification, ensure to publish to: "8000:8000/http"
+// 4. specify 'images', where the 'containerBuild' is to be defined by the ./mysite/dockerfile
+
+/// F. Configure application for deployment to production envrionment ////
+// from Editor, for mysite/settings.py
+// 1. In mysite/settings.py, set 'ALLOWED_HOSTS = ["*"]', to allow for running the server on any host so we can run this on the Acorn Host
+// 2. Make a new variable '''CSRF_TRUSTED_ORIGINS = ["http://*.on-acorn.io", "https://*.on-acorn.io"]''' which will store the trusted origins where we will submit our forms... allowing all our Acorn Origins since thats where we are dpeloying
+// 3. Specify "DATABASES" variable to use the environment variables for database configuration details...
+
+/// G. Deploying ACORN account
+/// From the Terminal
+// 1. brew install acorn-io/cli/acorn
+// 2. acorn login
+
