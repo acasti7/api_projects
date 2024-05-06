@@ -15,7 +15,6 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-#os.environ["OPENAI_API_KEY"] = 'sk-proj-y2J384DlpQ7TAmc5vlk5T3BlbkFJxYuI0lvfsnMTBtk8VTGy'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
